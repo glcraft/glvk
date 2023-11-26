@@ -10,8 +10,8 @@ if has_config("validation_layers") then
     add_requires("vulkan-validationlayers")
 end 
 
-target("gl3d-cpp")
-    set_kind("binary")
+target("glvk")
+    set_kind("$(kind)")
     set_languages("cxx23")
     add_files(
         "src/*.cpp", 
