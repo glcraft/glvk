@@ -1,0 +1,4 @@
+export module glvk;
+
+export import :vkenv;
+

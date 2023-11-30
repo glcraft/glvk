@@ -1,0 +1,21 @@
+export module glvk:vkenv;
+
+import vulkan_hpp;
+
+namespace glvk {
+    
+    export class VkEnvironnement {
+    public:
+        VkEnvironnement();
+        ~VkEnvironnement();
+    private:
+        
+    };
+
+    VkEnvironnement::VkEnvironnement() {
+        
+    }
+    VkEnvironnement::~VkEnvironnement() {
+        
+    }
+}
