@@ -9,11 +9,8 @@ end
 target("glvk")
     set_kind("$(kind)")
     set_languages("cxx23")
-    for _, paths in ipairs({"src/*.cpp", "modules/**.mpp"}) do
-        for _, file in ipairs(os.files(paths)) do
-            add_files(file)
-        end
-    end
+    -- add_files("src/**.cpp")
+    add_files("modules/**.mpp", {public = true})
     if is_plat("macosx") then 
         add_packages("moltenvk")
     end
