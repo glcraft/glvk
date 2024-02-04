@@ -17,3 +17,9 @@ target("glvk")
     add_packages("vulkan-headers", "glm")
     -- for std modules
     add_cxxflags("-fexperimental-library")
+    add_defines(
+        "VK_NO_PROTOTYPES",
+        "VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1",
+        "VULKAN_HPP_STORAGE_SHARED",
+        {public = true}
+    )
