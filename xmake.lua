@@ -1,7 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
 
-add_requires("vulkan-headers 1.3.268", "glm")
+add_requires("vulkan-headers", "glm")
 if is_plat("macosx") then 
     add_requires("moltenvk")
 end
