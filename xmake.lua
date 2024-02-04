@@ -1,5 +1,14 @@
-add_rules("mode.debug", "mode.release")
-
+add_rules("plugin.vsxmake.autoupdate")
+add_rules("plugin.compile_commands.autoupdate", { outputdir = "build", lsp = "clangd" })
+add_rules(
+  "mode.debug",
+  "mode.release",
+  "mode.releasedbg",
+  "mode.check",
+  "mode.coverage",
+  "mode.profile",
+  "mode.minsizerel"
+)
 
 add_requires("vulkan-headers", "glm")
 if is_plat("macosx") then 
