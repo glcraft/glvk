@@ -1,0 +1,45 @@
+module;
+
+#include <SDL2/SDL.h>
+
+export module MainContext;
+export import sdl;
+export import std;
+
+export class MainContext {
+    public:
+        static auto InitWindow(sdl2::Context ctx) -> sdl2::Window;
+
+        MainContext() = delete;
+        MainContext(sdl2::Context ctx, sdl2::Window(*init_window)(sdl2::Context) = InitWindow) : sdl2_context{ctx}, window(init_window(ctx))
+        {}
+        ~MainContext() = default;
+
+        auto run() -> void;
+    private:
+        sdl2::Window window;
+        sdl2::Context sdl2_context;
+};
+
+auto MainContext::InitWindow(sdl2::Context ctx) -> sdl2::Window {
+    auto monitor = ctx.primaryMonitor();
+    auto workarea = monitor.desktopDisplayMode().size();
+    return ctx.createWindow(workarea.x*3/4, workarea.y*3/4, "Vulkan window");
+}
+
+auto MainContext::run() -> void {
+    SDL_Event event;
+    bool runnning = true;
+    while(runnning) {
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                runnning = false;
+                break;
+            } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) {
+                runnning = false;
+                break;
+            }
+        }
+        
+    }
+}

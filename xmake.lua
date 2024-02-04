@@ -10,7 +10,14 @@ add_rules(
   "mode.minsizerel"
 )
 
+option("build-app", { default = false })
+
+if has_config("build-app") then
+    includes("app")
+end
+
 add_requires("vulkan-headers", "glm")
+
 if is_plat("macosx") then 
     add_requires("moltenvk")
 end

@@ -1,0 +1,104 @@
+module;
+
+#include <SDL2/SDL.h>
+
+export module sdl;
+export import std;
+export import glm;
+
+export namespace sdl2 {
+    class Context;
+    
+    class DisplayMode {
+        friend class Context;
+        friend class Monitor;
+        SDL_DisplayMode mode;
+        DisplayMode(SDL_DisplayMode mode) : mode(mode) 
+        {}
+    public:
+        inline auto format() const -> Uint32 {
+            return mode.format;
+        }
+        inline auto width() const -> int {
+            return mode.w;
+        }
+        inline auto height() const -> int {
+            return mode.h;
+        }
+        inline auto refreshRate() const -> int {
+            return mode.refresh_rate;
+        }
+        inline auto size() const -> glm::ivec2 {
+            return glm::ivec2(this->width(), this->height());
+        }
+    };
+    class Monitor {
+        friend class Context;
+        int m_id;
+        Monitor(int id) : m_id(id) 
+        {}
+    public:
+        inline auto id() const -> Uint32 {
+            return m_id;
+        }
+        inline auto name() const -> std::string_view {
+            return SDL_GetDisplayName(m_id);
+        }
+        inline auto currentDisplayMode() const -> DisplayMode {
+            SDL_DisplayMode mode;
+            SDL_GetCurrentDisplayMode(m_id, &mode);
+            return mode;
+        }
+        auto displayModes() const -> std::vector<DisplayMode> {
+            int display_count = SDL_GetNumDisplayModes(m_id);
+            auto modes = std::vector<DisplayMode>{};
+            modes.reserve(display_count);
+            for (int i = 0; i < display_count; i++) {
+                SDL_DisplayMode mode;
+                SDL_GetDisplayMode(m_id, i, &mode);
+                modes.push_back(std::move(mode));
+            }
+            return modes;
+        }
+        auto desktopDisplayMode() const -> DisplayMode {
+            SDL_DisplayMode mode;
+            SDL_GetDesktopDisplayMode(m_id, &mode);
+            return mode;
+        }
+    };
+    class Window {
+        friend class Context;
+        std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window;
+        Window(SDL_Window* window);
+    public:
+        Window(Window&&) = default;
+
+        auto ptr() const -> SDL_Window* {
+            return window.get();
+        }
+
+        auto shouldClose() -> bool;
+    };
+    class Context {
+        int* shared_counter = nullptr;
+    public:
+        Context();
+        Context(const Context&);
+        Context(Context&&);
+        ~Context();
+
+        auto createWindow(int width, int height, const char* title) const -> Window;
+
+        auto primaryMonitor() const -> Monitor {
+            return Monitor{0};
+        }
+        auto monitors() const -> std::vector<Monitor> {
+            auto num = SDL_GetNumVideoDisplays();
+            return std::views::iota(0, num) 
+                | std::views::transform([&](auto i) {
+                    return Monitor{i};
+                })
+                | std::ranges::to<std::vector>();
+        }
+    };
+}
