@@ -16,16 +16,22 @@ if has_config("build-app") then
     includes("app")
 end
 
-add_requires("vulkan-headers", "glm")
+add_requires("vulkan-headers", "glm") -- , { configs = { modules = true } }
 
 if is_plat("macosx") then 
     add_requires("moltenvk")
 end
 
 target("glvk")
-    set_kind("$(kind)")
     set_languages("cxx23")
-    -- add_files("src/**.cpp")
+    if #os.files("src/**.cpp") > 0 then
+        set_kind("$(kind)")
+        add_files("src/**.cpp")
+    else 
+        set_kind("moduleonly")
+    end
+    add_includedirs("include", {public = true})
+    add_headerfiles("include/**")
     add_files("modules/**.mpp", {public = true})
     if is_plat("macosx") then 
         add_packages("moltenvk")
