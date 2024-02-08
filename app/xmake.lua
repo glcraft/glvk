@@ -1,4 +1,4 @@
-add_requires("glm", "libsdl", "vulkan-headers")
+add_requires("libsdl")
 
 add_cxxflags("clang::-fexperimental-library", { force = true })
 add_ldflags("clang::-fexperimental-library", { force = true })
