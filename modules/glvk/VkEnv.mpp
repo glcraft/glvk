@@ -1,5 +1,11 @@
-export module glvk:vkenv;
+module;
 
+#include <vulkan/vulkan_hpp_macros.hpp>
+
+export module glvk.Env;
+
+import std;
+import glvk.Utils;
 import vulkan_hpp;
 
 namespace glvk {
@@ -9,11 +15,13 @@ namespace glvk {
         VkEnvironnement();
         ~VkEnvironnement();
     private:
-        
+        utils::DeferInit<vk::raii::Context> vk_context;
+        utils::DeferInit<vk::raii::Instance> vk_instance;
     };
 
     VkEnvironnement::VkEnvironnement() {
         
+
     }
     VkEnvironnement::~VkEnvironnement() {
         
